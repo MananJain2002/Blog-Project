@@ -349,7 +349,7 @@ app.get("/register", (req, res) => {
 	if (req.isAuthenticated()) {
 		res.redirect("/");
 	} else {
-		const message = req.flash("exist")
+		const message = req.flash("error")
 		res.render("register", {message});
 	}
 });
@@ -532,9 +532,10 @@ app.post("/forgotPassword", (req, res) => {
 					to: user.username,
 					from: process.env.EMAIL,
 				});
-				res.render("confirmP", {username: user.username})
+				const message = req.flash("error");
+				res.render("confirmP", {username: user.username, message});
 			} else {
-				req.flash("error", "User does not exist");
+				req.flash("error", "User does not error");
 				res.redirect("/forgotPassword");
 			}
 		});
@@ -544,7 +545,9 @@ app.post("/forgotPassword", (req, res) => {
 			const message = req.flash("error");
 			res.render("forgotPassword", {username: req.body.username, message});
 		} else {
-			res.render("confirmP", {username: req.body.username});
+			req.flash("error", "Otp does not match!");
+			const message = req.flash("error");
+			res.render("confirmP", {username: req.body.username, message});
 		}
 	}
 	if(req.body.forgotPage) {
@@ -585,10 +588,13 @@ app.post("/register", (req, res) => {
 			const username = req.body.username;
 			const password = req.body.password;
 			const name = req.body.FirstName;
+			req.flash("error", "Otp does not match!");
+			const message = req.flash("error");
 			res.render("confirm", {
 				email: username,
 				password: password,
 				name: name,
+				message
 			});
 		}
 	}
@@ -601,7 +607,7 @@ app.post("/register", (req, res) => {
 				function (sanitizedUser) {
 					if(sanitizedUser) {
 						if(sanitizedUser.passwordYes) {
-							req.flash("exist", "User already exist");
+							req.flash("error", "User already exist");
 							res.redirect("/register");
 						} else {
 							sendEmail({
@@ -610,10 +616,12 @@ app.post("/register", (req, res) => {
 								to: username,
 								from: process.env.EMAIL,
 							});
+							const message = req.flash("error");
 							res.render("confirm", {
 								email: username,
 								password: password,
 								name: name,
+								message
 							});
 						}
 					} else {
@@ -623,15 +631,18 @@ app.post("/register", (req, res) => {
 							to: username,
 							from: process.env.EMAIL,
 						});
+						const message = req.flash("error");
 						res.render("confirm", {
 							email: username,
 							password: password,
 							name: name,
+							message
 						});
 					}
 				}
 			)
 		} else {
+			req.flash("error", "Password does not match!");
 			res.redirect("/register");
 		}
 	} else {
