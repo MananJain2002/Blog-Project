@@ -700,5 +700,5 @@ if (port == null || port == "") {
 }
 
 https.createServer(options, app).listen(port, function (req, res) {
-	console.log("Server started successfully");
+	console.log("Server has started successfully");
 });
