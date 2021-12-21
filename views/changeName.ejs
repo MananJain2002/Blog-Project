@@ -1,0 +1,12 @@
+<%- include("partials/header2"); -%>
+
+<form action="/changeName" method="POST">
+	<div class="signIn">
+        <h1 class="h3 mb-3 fw-normal">Want to change name?</h1>
+        <p>Please enter a new name for your account.</p>
+        <input class="form-control form-control-lg nameip" type="text" placeholder="Change name" name="Name" aria-label=".form-control-sm example" required autofocus>
+		<button class="w-100 btn btn-lg btn-primary" type="submit">Confirm</button>
+        <p style="margin-top: 20px; color: red;"><%=message%></p>
+</form>
+
+<%- include("partials/footer2"); -%>

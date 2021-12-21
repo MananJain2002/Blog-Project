@@ -1,0 +1,28 @@
+<%- include("partials/header"); -%>
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <%= name %>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+      <li><a class="dropdown-item afont" href="/compose">Create Post</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item afont" href="/changeName">Change Name</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item afont" href="/changePassword">Change Password</a></li>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item afont" href="/logout">Logout</a></li>
+    </ul>
+  </li>
+</ul>
+</div>
+</div>
+</nav>
+
+<body>
+<div class="container">
+
+
+    <h1>Contact</h1>
+    <p> <%= contactContent %> </p>
+<%- include("partials/footer"); -%>

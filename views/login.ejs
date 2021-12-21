@@ -1,0 +1,81 @@
+<%- include("partials/header2"); -%>
+
+<script>
+	function functionAlert() {
+		const togglePassword = document.querySelector('#togglePassword');
+		const password = document.querySelector('#floatingPassword');
+		const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+		password.setAttribute('type', type);
+		togglePassword.classList.toggle('eyeHide');
+		togglePassword.classList.toggle('eyeShow');
+		togglePassword.classList.toggle('fa-eye-slash');
+		togglePassword.classList.toggle('fa-eye');
+	}
+</script>
+
+<form action="/login" method="POST">
+	<div class="signIn">
+		<h1 class="h3 mb-3 fw-normal">Welcome to My Journal</h1>
+		<div class="form-floating">
+			<input
+				type="email"
+				class="form-control"
+				id="floatingInput"
+				placeholder="name@example.com"
+				name="username"
+			/>
+			<label for="floatingInput">Email address</label>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="mb-3 form-floating col-9 pc">
+					<input
+						type="password"
+						class="form-control bottomp"
+						id="floatingPassword"
+						placeholder="Password"
+						name="password"
+					/>
+					<label for="floatingPassword">Password</label>
+				</div>
+				<div class="col-3 form-floating pc" onclick="functionAlert();">
+					<i class="far fa-eye-slash fa-2x eyeHide" id="togglePassword"></i>	
+				</div>
+			</div>
+		</div>
+
+		<button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+		<div class="forgotLink">
+			<a href="/forgotPassword" class="forgotLink">Forgot Password?</a>
+		</div>
+		<p style="margin-top: 20px; color: red;"><%=failureFlash%></p>
+		<p>-------------Or Sign Up Using-------------</p>
+
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<a href="/auth/facebook" role="button"
+						><i class="fab fa-facebook fa-3x"></i
+					></a>
+				</div>
+				<div class="col">
+					<a href="/auth/google" role="button"
+						><i class="fab fa-google fa-3x"></i
+					></a>
+				</div>
+				<div class="col">
+					<a href="/auth/twitter" role="button"
+						><i class="fab fa-twitter fa-3x"></i
+					></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="signIn redirect">
+		<span>
+			Don't have an account? <a href="/register"> <span>Sign up</span></a>
+		</span>
+	</div>
+</form>
+<%- include("partials/footer2"); -%>

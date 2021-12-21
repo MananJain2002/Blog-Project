@@ -1,0 +1,16 @@
+<%- include("partials/header2"); -%>
+
+    <h3 class="conh3">Code is sent to </h3>
+    <h3><%=email%></h3>
+    <form action="/register" method="post">
+        <div class="condiv">
+            <input type="text" name="otp" placeholder="Enter OTP">
+        </div>
+        <input type="hidden" name="pageCheck" value="1">
+        <input type="hidden" name="username" value="<%= email %>">
+        <input type="hidden" name="password" value="<%= password %>">
+        <input type="hidden" name="FirstName" value="<%= name %>">
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Verify and Create Account</button>
+    </form>
+
+<%- include("partials/footer2"); -%>

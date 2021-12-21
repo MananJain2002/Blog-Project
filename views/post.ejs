@@ -1,0 +1,64 @@
+<%- include("partials/header"); -%>
+
+<script>
+  function submitResult(e) {
+    e.preventDefault();
+    
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+      if (result.isConfirmed) {
+          Swal.fire(
+              'Deleted!',
+              'Your post has been deleted.',
+              'success'
+          ).then((result) => {
+            document.getElementById("EditForm").submit();
+          });
+      }
+    })
+  }
+</script>
+
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <%= name %>
+  </a>
+  <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+    <li><a class="dropdown-item afont" href="/compose">Create Post</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item afont" href="/changeName">Change Name</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item afont" href="/changePassword">Change Password</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item afont" href="/logout">Logout</a></li>
+  </ul>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+
+<body>
+<div class="container">
+
+
+  <h1><%=title%></h1>
+  <p><%=content%></p>
+  
+  <form action="/" method="post" id="EditForm">
+    <div class="containerb">
+      <div class="btn-holder">
+        <button type="submit" class="btn btn-danger" onclick="submitResult(event)">Delete Post</button>
+        <input type="hidden" name="postId" value="<%= requestedPostId %>">
+      </div>
+    </div>
+  </form>
+
+<%- include("partials/footer"); -%>
