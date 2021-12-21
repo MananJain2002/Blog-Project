@@ -1,7 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const https = require("https");
-const fs = require("fs");
 const ejs = require("ejs");
 const _ = require("lodash");
 const mongoose = require("mongoose");
@@ -689,16 +687,11 @@ app.post("/register", (req, res) => {
 	}
 });
 
-const options = {
-	key: fs.readFileSync(__dirname + "/security/server.key"),
-	cert: fs.readFileSync(__dirname + "/security/server.cert"),
-};
-
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;
 }
 
-https.createServer(options, app).listen(port, function (req, res) {
-	console.log("Server has started successfully");
-});
+app.listen(port, () =>{
+	console.log("Server has started succesfully.");
+})
