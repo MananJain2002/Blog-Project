@@ -31,44 +31,44 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json());
 
-// const createTransporter = async () => {
-// 	const oauth2Client = new OAuth2(
-// 		process.env.GOOGLE_CLIENT_ID,
-// 		process.env.GOOGLE_CLIENT_SECRET,
-// 		"https://developers.google.com/oauthplayground"
-// 	);
+const createTransporter = async () => {
+	const oauth2Client = new OAuth2(
+		process.env.GOOGLE_CLIENT_ID,
+		process.env.GOOGLE_CLIENT_SECRET,
+		"https://developers.google.com/oauthplayground"
+	);
 
-// 	oauth2Client.setCredentials({
-// 		refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
-// 	});
+	oauth2Client.setCredentials({
+		refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
+	});
 
-// 	const accessToken = await new Promise((resolve, reject) => {
-// 		oauth2Client.getAccessToken((err, token) => {
-// 			if (err) {
-// 				reject("Failed to create access token :(");
-// 			}
-// 			resolve(token);
-// 		});
-// 	});
+	const accessToken = await new Promise((resolve, reject) => {
+		oauth2Client.getAccessToken((err, token) => {
+			if (err) {
+				reject("Failed to create access token :(");
+			}
+			resolve(token);
+		});
+	});
 
-// 	const transporter = nodemailer.createTransport({
-// 		service: "gmail",
-// 		auth: {
-// 			type: "OAuth2",
-// 			user: process.env.EMAIL,
-// 			accessToken,
-// 			clientId: process.env.GOOGLE_CLIENT_ID,
-// 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-// 			refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
-// 		},
-// 	});
-// 	return transporter;
-// };
+	const transporter = nodemailer.createTransport({
+		service: "gmail",
+		auth: {
+			type: "OAuth2",
+			user: process.env.EMAIL,
+			accessToken,
+			clientId: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+		},
+	});
+	return transporter;
+};
 
-// const sendEmail = async (emailOptions) => {
-// 	let emailTransporter = await createTransporter();
-// 	await emailTransporter.sendMail(emailOptions);
-// };
+const sendEmail = async (emailOptions) => {
+	let emailTransporter = await createTransporter();
+	await emailTransporter.sendMail(emailOptions);
+};
 
 app.use(
 	session({
@@ -119,151 +119,151 @@ passport.deserializeUser(function (id, done) {
 	});
 });
 
-// passport.use(
-// 	new GoogleStrategy(
-// 		{
-// 			clientID: process.env.GOOGLE_CLIENT_ID,
-// 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-// 			callbackURL: "https://localhost:3000/auth/google/blog",
-// 			userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
-// 		},
-// 		function (accessToken, refreshToken, profile, cb) {
-// 			User.findOne(
-// 				{
-// 					username: profile.emails[0].value,
-// 				},
-// 				function (err, user) {
-// 					if (err) {
-// 						return cb(err);
-// 					}
-// 					if (!user) {
-// 						user = new User({
-// 							name: profile.name.givenName,
-// 							username: profile.emails[0].value,
-// 							googleId: profile.id,
-// 						});
-// 						user.save(function (err) {
-// 							if (err) console.log(err);
-// 							return cb(err, user);
-// 						});
-// 					} else {
-// 						User.findOneAndUpdate(
-// 							{ username: profile.emails[0].value },
-// 							{ googleId: profile.id },
-// 							(err, user) => {
-// 								if (err) {
-// 									console.log(err);
-// 								} else {
-// 									return cb(err, user);
-// 								}
-// 							}
-// 						);
-// 					}
-// 				}
-// 			);
-// 		}
-// 	)
-// );
+passport.use(
+	new GoogleStrategy(
+		{
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: "https://localhost:3000/auth/google/blog",
+			userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+		},
+		function (accessToken, refreshToken, profile, cb) {
+			User.findOne(
+				{
+					username: profile.emails[0].value,
+				},
+				function (err, user) {
+					if (err) {
+						return cb(err);
+					}
+					if (!user) {
+						user = new User({
+							name: profile.name.givenName,
+							username: profile.emails[0].value,
+							googleId: profile.id,
+						});
+						user.save(function (err) {
+							if (err) console.log(err);
+							return cb(err, user);
+						});
+					} else {
+						User.findOneAndUpdate(
+							{ username: profile.emails[0].value },
+							{ googleId: profile.id },
+							(err, user) => {
+								if (err) {
+									console.log(err);
+								} else {
+									return cb(err, user);
+								}
+							}
+						);
+					}
+				}
+			);
+		}
+	)
+);
 
-// passport.use(
-// 	new FacebookStrategy(
-// 		{
-// 			clientID: process.env.FACEBOOK_APP_ID,
-// 			clientSecret: process.env.FACEBOOK_APP_SECRET,
-// 			callbackURL: "https://localhost:3000/auth/facebook/blog",
-// 			profileFields: ["id", "emails", "name"],
-// 		},
-// 		function (accessToken, refreshToken, profile, cb) {
-// 			// User.findOrCreate({ facebookId: profile.id, name: profile.name.givenName, username: profile.emails[0].value }, function (err, user) {
-// 			// 	return cb(err, user);
-// 			// });
-// 			User.findOne(
-// 				{
-// 					username: profile.emails[0].value,
-// 				},
-// 				function (err, user) {
-// 					if (err) {
-// 						return cb(err);
-// 					}
-// 					if (!user) {
-// 						user = new User({
-// 							name: profile.name.givenName,
-// 							username: profile.emails[0].value,
-// 							facebookId: profile.id,
-// 						});
-// 						user.save(function (err) {
-// 							if (err) console.log(err);
-// 							return cb(err, user);
-// 						});
-// 					} else {
-// 						User.findOneAndUpdate(
-// 							{ username: profile.emails[0].value },
-// 							{ facebookId: profile.id },
-// 							(err, user) => {
-// 								if (err) {
-// 									console.log(err);
-// 								} else {
-// 									return cb(err, user);
-// 								}
-// 							}
-// 						);
-// 					}
-// 				}
-// 			);
-// 		}
-// 	)
-// );
+passport.use(
+	new FacebookStrategy(
+		{
+			clientID: process.env.FACEBOOK_APP_ID,
+			clientSecret: process.env.FACEBOOK_APP_SECRET,
+			callbackURL: "https://localhost:3000/auth/facebook/blog",
+			profileFields: ["id", "emails", "name"],
+		},
+		function (accessToken, refreshToken, profile, cb) {
+			// User.findOrCreate({ facebookId: profile.id, name: profile.name.givenName, username: profile.emails[0].value }, function (err, user) {
+			// 	return cb(err, user);
+			// });
+			User.findOne(
+				{
+					username: profile.emails[0].value,
+				},
+				function (err, user) {
+					if (err) {
+						return cb(err);
+					}
+					if (!user) {
+						user = new User({
+							name: profile.name.givenName,
+							username: profile.emails[0].value,
+							facebookId: profile.id,
+						});
+						user.save(function (err) {
+							if (err) console.log(err);
+							return cb(err, user);
+						});
+					} else {
+						User.findOneAndUpdate(
+							{ username: profile.emails[0].value },
+							{ facebookId: profile.id },
+							(err, user) => {
+								if (err) {
+									console.log(err);
+								} else {
+									return cb(err, user);
+								}
+							}
+						);
+					}
+				}
+			);
+		}
+	)
+);
 
-// passport.use(
-// 	new TwitterStrategy(
-// 		{
-// 			consumerKey: process.env.TWITTER_API_KEY,
-// 			consumerSecret: process.env.TWITTER_API_SECRET,
-// 			callbackURL: "https://localhost:3000/auth/twitter/blog",
-// 			userProfileURL:
-// 				"https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true",
-// 			passReqToCallback: true,
-// 		},
-// 		function (token, tokenSecret, profile, cb) {
-// 			// User.findOrCreate({ twitterId: profile.id, name: "f", username: profile.emails[0].value }, function (err, user) {
-// 			// 	return cb(err, user);
-// 			// });
-// 			User.findOne(
-// 				{
-// 					username: profile.emails[0].value,
-// 				},
-// 				function (err, user) {
-// 					if (err) {
-// 						return cb(err);
-// 					}
-// 					if (!user) {
-// 						user = new User({
-// 							name: profile.name.givenName,
-// 							username: profile.emails[0].value,
-// 							twitterId: profile.id,
-// 						});
-// 						user.save(function (err) {
-// 							if (err) console.log(err);
-// 							return cb(err, user);
-// 						});
-// 					} else {
-// 						User.findOneAndUpdate(
-// 							{ username: profile.emails[0].value },
-// 							{ twitterId: profile.id },
-// 							(err, user) => {
-// 								if (err) {
-// 									console.log(err);
-// 								} else {
-// 									return cb(err, user);
-// 								}
-// 							}
-// 						);
-// 					}
-// 				}
-// 			);
-// 		}
-// 	)
-// );
+passport.use(
+	new TwitterStrategy(
+		{
+			consumerKey: process.env.TWITTER_API_KEY,
+			consumerSecret: process.env.TWITTER_API_SECRET,
+			callbackURL: "https://localhost:3000/auth/twitter/blog",
+			userProfileURL:
+				"https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true",
+			passReqToCallback: true,
+		},
+		function (token, tokenSecret, profile, cb) {
+			// User.findOrCreate({ twitterId: profile.id, name: "f", username: profile.emails[0].value }, function (err, user) {
+			// 	return cb(err, user);
+			// });
+			User.findOne(
+				{
+					username: profile.emails[0].value,
+				},
+				function (err, user) {
+					if (err) {
+						return cb(err);
+					}
+					if (!user) {
+						user = new User({
+							name: profile.name.givenName,
+							username: profile.emails[0].value,
+							twitterId: profile.id,
+						});
+						user.save(function (err) {
+							if (err) console.log(err);
+							return cb(err, user);
+						});
+					} else {
+						User.findOneAndUpdate(
+							{ username: profile.emails[0].value },
+							{ twitterId: profile.id },
+							(err, user) => {
+								if (err) {
+									console.log(err);
+								} else {
+									return cb(err, user);
+								}
+							}
+						);
+					}
+				}
+			);
+		}
+	)
+);
 
 app.get("/", function (req, res) {
 	res.set("Cache-Control", "no-store");
@@ -286,53 +286,53 @@ app.get("/", function (req, res) {
 	}
 });
 
-// app.get(
-// 	"/auth/google",
-// 	passport.authenticate("google", {
-// 		scope: [
-// 			"profile",
-// 			"https://www.googleapis.com/auth/userinfo.profile",
-// 			"https://www.googleapis.com/auth/userinfo.email",
-// 		],
-// 	})
-// );
+app.get(
+	"/auth/google",
+	passport.authenticate("google", {
+		scope: [
+			"profile",
+			"https://www.googleapis.com/auth/userinfo.profile",
+			"https://www.googleapis.com/auth/userinfo.email",
+		],
+	})
+);
 
-// app.get(
-// 	"/auth/google/blog",
-// 	passport.authenticate("google", { failureRedirect: "/login" }),
-// 	function (req, res) {
-// 		// Successful authentication, redirect home.
-// 		res.redirect("/");
-// 	}
-// );
+app.get(
+	"/auth/google/blog",
+	passport.authenticate("google", { failureRedirect: "/login" }),
+	function (req, res) {
+		// Successful authentication, redirect home.
+		res.redirect("/");
+	}
+);
 
-// app.get(
-// 	"/auth/facebook",
-// 	passport.authenticate("facebook", {
-// 		// scope: "public_profile",
-// 		scope: ["email"],
-// 	})
-// );
+app.get(
+	"/auth/facebook",
+	passport.authenticate("facebook", {
+		// scope: "public_profile",
+		scope: ["email"],
+	})
+);
 
-// app.get(
-// 	"/auth/facebook/blog",
-// 	passport.authenticate("facebook", { failureRedirect: "/login" }),
-// 	function (req, res) {
-// 		// Successful authentication, redirect home.
-// 		res.redirect("/");
-// 	}
-// );
+app.get(
+	"/auth/facebook/blog",
+	passport.authenticate("facebook", { failureRedirect: "/login" }),
+	function (req, res) {
+		// Successful authentication, redirect home.
+		res.redirect("/");
+	}
+);
 
-// app.get("/auth/twitter", passport.authenticate("twitter"));
+app.get("/auth/twitter", passport.authenticate("twitter"));
 
-// app.get(
-// 	"/auth/twitter/blog",
-// 	passport.authenticate("twitter", { failureRedirect: "/login" }),
-// 	function (req, res) {
-// 		// Successful authentication, redirect home.
-// 		res.redirect("/");
-// 	}
-// );
+app.get(
+	"/auth/twitter/blog",
+	passport.authenticate("twitter", { failureRedirect: "/login" }),
+	function (req, res) {
+		// Successful authentication, redirect home.
+		res.redirect("/");
+	}
+);
 
 app.get("/login", (req, res) => {
 	if (req.isAuthenticated()) {
@@ -518,176 +518,174 @@ app.post("/changePassword", (req, res) => {
 	}
 });
 
-// const otpP= Math.floor(100000 + Math.random() * 900000);
+const otpP= Math.floor(100000 + Math.random() * 900000);
 
-// app.post("/forgotPassword", (req, res) => {
-// 	if(req.body.emailCheck) {
-// 		User.findOne({username: req.body.username}, (err, user) => {
-// 			if (user){
-// 				sendEmail({
-// 					subject: "Test",
-// 					text: "I am sending an email from nodemailer! " + otpP,
-// 					to: user.username,
-// 					from: process.env.EMAIL,
-// 				});
-// 				const message = req.flash("error");
-// 				res.render("confirmP", {username: user.username, message});
-// 			} else {
-// 				req.flash("error", "User does not error");
-// 				res.redirect("/forgotPassword");
-// 			}
-// 		});
-// 	}
-// 	if (req.body.pageCheck) {
-// 		if (Number(req.body.otp) === otpP) {
-// 			const message = req.flash("error");
-// 			res.render("forgotPassword", {username: req.body.username, message});
-// 		} else {
-// 			req.flash("error", "Otp does not match!");
-// 			const message = req.flash("error");
-// 			res.render("confirmP", {username: req.body.username, message});
-// 		}
-// 	}
-// 	if(req.body.forgotPage) {
-// 		if(req.body.new === req.body.confirm) {
-// 			User.findByUsername(req.body.username).then(function(sanitizedUser){
-// 				if (sanitizedUser){
-// 					sanitizedUser.setPassword(req.body.new, function(){
-// 						sanitizedUser.save();
-// 						res.redirect("/");
-// 					});
-// 				} else {
-// 					res.status(500).json({message: 'This user does not exist'});
-// 				}
-// 			},function(err){
-// 				console.error(err);
-// 			});
-// 		} else {
-// 			req.flash("error", "Password does not match!");
-// 			const message = req.flash("error");
-// 			res.render("forgotPassword", {username: req.body.username, message});
-// 		}
-// 	}
-// });
+app.post("/forgotPassword", (req, res) => {
+	if(req.body.emailCheck) {
+		User.findOne({username: req.body.username}, (err, user) => {
+			if (user){
+				sendEmail({
+					subject: "Test",
+					text: "I am sending an email from nodemailer! " + otpP,
+					to: user.username,
+					from: process.env.EMAIL,
+				});
+				const message = req.flash("error");
+				res.render("confirmP", {username: user.username, message});
+			} else {
+				req.flash("error", "User does not error");
+				res.redirect("/forgotPassword");
+			}
+		});
+	}
+	if (req.body.pageCheck) {
+		if (Number(req.body.otp) === otpP) {
+			const message = req.flash("error");
+			res.render("forgotPassword", {username: req.body.username, message});
+		} else {
+			req.flash("error", "Otp does not match!");
+			const message = req.flash("error");
+			res.render("confirmP", {username: req.body.username, message});
+		}
+	}
+	if(req.body.forgotPage) {
+		if(req.body.new === req.body.confirm) {
+			User.findByUsername(req.body.username).then(function(sanitizedUser){
+				if (sanitizedUser){
+					sanitizedUser.setPassword(req.body.new, function(){
+						sanitizedUser.save();
+						res.redirect("/");
+					});
+				} else {
+					res.status(500).json({message: 'This user does not exist'});
+				}
+			},function(err){
+				console.error(err);
+			});
+		} else {
+			req.flash("error", "Password does not match!");
+			const message = req.flash("error");
+			res.render("forgotPassword", {username: req.body.username, message});
+		}
+	}
+});
 
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true, failureFlash: 'Invalid username or passwerd.'}));
 
 passport.authenticate('local', { failureFlash: 'Invalid username or password.' });
 
-// var verified = 0;
-// const otp = Math.floor(100000 + Math.random() * 900000);
+var verified = 0;
+const otp = Math.floor(100000 + Math.random() * 900000);
 
-// app.post("/register", (req, res) => {
-// 	if (Number(req.body.pageCheck)) {
-// 		if (Number(req.body.otp) === otp) {
-// 			verified = 1;
-// 		} else {
-// 			const username = req.body.username;
-// 			const password = req.body.password;
-// 			const name = req.body.FirstName;
-// 			req.flash("error", "Otp does not match!");
-// 			const message = req.flash("error");
-// 			res.render("confirm", {
-// 				email: username,
-// 				password: password,
-// 				name: name,
-// 				message
-// 			});
-// 		}
-// 	}
-// 	if (!verified) {
-// 		if (req.body.password === req.body.ConfirmPassword) {
-// 			const username = req.body.username;
-// 			const password = req.body.password;
-// 			const name = req.body.FirstName;
-// 			User.findByUsername(req.body.username).then(
-// 				function (sanitizedUser) {
-// 					if(sanitizedUser) {
-// 						if(sanitizedUser.passwordYes) {
-// 							req.flash("error", "User already exist");
-// 							res.redirect("/register");
-// 						} else {
-// 							sendEmail({
-// 								subject: "Test",
-// 								text: "I am sending an email from nodemailer! " + otp,
-// 								to: username,
-// 								from: process.env.EMAIL,
-// 							});
-// 							const message = req.flash("error");
-// 							res.render("confirm", {
-// 								email: username,
-// 								password: password,
-// 								name: name,
-// 								message
-// 							});
-// 						}
-// 					} else {
-// 						sendEmail({
-// 							subject: "Test",
-// 							text: "I am sending an email from nodemailer! " + otp,
-// 							to: username,
-// 							from: process.env.EMAIL,
-// 						});
-// 						const message = req.flash("error");
-// 						res.render("confirm", {
-// 							email: username,
-// 							password: password,
-// 							name: name,
-// 							message
-// 						});
-// 					}
-// 				}
-// 			)
-// 		} else {
-// 			req.flash("error", "Password does not match!");
-// 			res.redirect("/register");
-// 		}
-// 	} else {
-// 		verified = 0;
-// 		User.findByUsername(req.body.username).then(
-// 			function (sanitizedUser) {
-// 				if (sanitizedUser) {
-// 					User.findOneAndUpdate(
-// 						{ username: req.body.username },
-// 						{ passwordYes: 1 },
-// 						(err) => {
-// 							if (err) {
-// 								console.log(err);
-// 							}
-// 						}
-// 					);
-// 					sanitizedUser.setPassword(req.body.password, function () {
-// 						sanitizedUser.save();
-// 						passport.authenticate("local")(req, res, () => {
-// 							res.redirect("/");
-// 						});
-// 					});
-// 				} else {
-// 					User.register(
-// 						{ username: req.body.username, name: req.body.FirstName, passwordYes: 1 },
-// 						req.body.password,
-// 						(err, user) => {
-// 							if (err) {
-// 								console.log(err);
-// 								res.redirect("/register");
-// 							} else {
-// 								passport.authenticate("local")(req, res, () => {
-// 									res.redirect("/");
-// 								});
-// 							}
-// 						}
-// 					);
-// 				}
-// 			},
-// 			function (err) {
-// 				console.error(err);
-// 			}
-// 		);
-// 	}
-// });
-
-//
+app.post("/register", (req, res) => {
+	if (Number(req.body.pageCheck)) {
+		if (Number(req.body.otp) === otp) {
+			verified = 1;
+		} else {
+			const username = req.body.username;
+			const password = req.body.password;
+			const name = req.body.FirstName;
+			req.flash("error", "Otp does not match!");
+			const message = req.flash("error");
+			res.render("confirm", {
+				email: username,
+				password: password,
+				name: name,
+				message
+			});
+		}
+	}
+	if (!verified) {
+		if (req.body.password === req.body.ConfirmPassword) {
+			const username = req.body.username;
+			const password = req.body.password;
+			const name = req.body.FirstName;
+			User.findByUsername(req.body.username).then(
+				function (sanitizedUser) {
+					if(sanitizedUser) {
+						if(sanitizedUser.passwordYes) {
+							req.flash("error", "User already exist");
+							res.redirect("/register");
+						} else {
+							sendEmail({
+								subject: "Test",
+								text: "I am sending an email from nodemailer! " + otp,
+								to: username,
+								from: process.env.EMAIL,
+							});
+							const message = req.flash("error");
+							res.render("confirm", {
+								email: username,
+								password: password,
+								name: name,
+								message
+							});
+						}
+					} else {
+						sendEmail({
+							subject: "Test",
+							text: "I am sending an email from nodemailer! " + otp,
+							to: username,
+							from: process.env.EMAIL,
+						});
+						const message = req.flash("error");
+						res.render("confirm", {
+							email: username,
+							password: password,
+							name: name,
+							message
+						});
+					}
+				}
+			)
+		} else {
+			req.flash("error", "Password does not match!");
+			res.redirect("/register");
+		}
+	} else {
+		verified = 0;
+		User.findByUsername(req.body.username).then(
+			function (sanitizedUser) {
+				if (sanitizedUser) {
+					User.findOneAndUpdate(
+						{ username: req.body.username },
+						{ passwordYes: 1 },
+						(err) => {
+							if (err) {
+								console.log(err);
+							}
+						}
+					);
+					sanitizedUser.setPassword(req.body.password, function () {
+						sanitizedUser.save();
+						passport.authenticate("local")(req, res, () => {
+							res.redirect("/");
+						});
+					});
+				} else {
+					User.register(
+						{ username: req.body.username, name: req.body.FirstName, passwordYes: 1 },
+						req.body.password,
+						(err, user) => {
+							if (err) {
+								console.log(err);
+								res.redirect("/register");
+							} else {
+								passport.authenticate("local")(req, res, () => {
+									res.redirect("/");
+								});
+							}
+						}
+					);
+				}
+			},
+			function (err) {
+				console.error(err);
+			}
+		);
+	}
+});
 
 let port = process.env.PORT;
 if (port == null || port == "") {
