@@ -222,9 +222,6 @@ passport.use(
 			consumerKey: process.env.TWITTER_API_KEY,
 			consumerSecret: process.env.TWITTER_API_SECRET,
 			callbackURL: "https://obscure-savannah-61411.herokuapp.com/auth/twitter/blog",
-			userProfileURL:
-				"https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true",
-			passReqToCallback: true,
 		},
 		function (token, tokenSecret, profile, cb) {
 			// User.findOrCreate({ twitterId: profile.id, name: "f", username: profile.emails[0].value }, function (err, user) {
