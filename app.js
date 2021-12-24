@@ -323,7 +323,7 @@ app.get(
 	}
 );
 
-app.get("/auth/twitter", passport.authenticate("twitter"));
+app.get("/auth/twitter", passport.authenticate("twitter", {scope: ['email']}));
 
 app.get(
 	"/auth/twitter/blog",
