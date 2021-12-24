@@ -126,7 +126,7 @@ passport.use(
 		{
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: "https://localhost:3000/auth/google/blog",
+			callbackURL: "https://obscure-savannah-61411.herokuapp.com/auth/google/blog",
 			userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
 		},
 		function (accessToken, refreshToken, profile, cb) {
@@ -172,7 +172,7 @@ passport.use(
 		{
 			clientID: process.env.FACEBOOK_APP_ID,
 			clientSecret: process.env.FACEBOOK_APP_SECRET,
-			callbackURL: "https://localhost:3000/auth/facebook/blog",
+			callbackURL: "https://obscure-savannah-61411.herokuapp.com/auth/facebook/blog",
 			profileFields: ["id", "emails", "name"],
 		},
 		function (accessToken, refreshToken, profile, cb) {
@@ -221,7 +221,7 @@ passport.use(
 		{
 			consumerKey: process.env.TWITTER_API_KEY,
 			consumerSecret: process.env.TWITTER_API_SECRET,
-			callbackURL: "https://localhost:3000/auth/twitter/blog",
+			callbackURL: "https://obscure-savannah-61411.herokuapp.com/auth/twitter/blog",
 			userProfileURL:
 				"https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true",
 			passReqToCallback: true,
