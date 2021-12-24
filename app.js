@@ -227,6 +227,7 @@ passport.use(
 			// User.findOrCreate({ twitterId: profile.id, name: "f", username: profile.emails[0].value }, function (err, user) {
 			// 	return cb(err, user);
 			// });
+			console.log(profile);
 			User.findOne(
 				{
 					username: profile.emails[0].value,
