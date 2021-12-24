@@ -696,9 +696,11 @@ const options = {
 
 let port = process.env.PORT;
 if (port == null || port == "") {
-  port = 3000;
+	https.createServer(options, app).listen(3000, function (req, res) {
+		console.log("Server is running on port 3000");
+	});
+} else {
+	app.listen(port, () => {
+		console.log("Server has started succesfully.");
+	});
 }
-
-https.createServer(options, app).listen(port, function (req, res) {
-	console.log("Server has started succesfully.");
-});
