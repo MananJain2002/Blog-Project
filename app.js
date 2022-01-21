@@ -434,6 +434,10 @@ app.get("/logout", (req, res) => {
 	res.redirect("/");
 });
 
+app.get("/googleb12efe30b52aa540", (req, res) => {
+	res.sendFile(__dirname + "/googleb12efe30b52aa540.html");
+});
+
 app.post("/", (req, res) => {
 	User.findOneAndUpdate(
 		{ _id: req.user._id },
